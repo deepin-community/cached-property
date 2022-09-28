@@ -1,0 +1,10 @@
+# Only run Python3 tests, they contain Python3-specific syntax
+Depends: python3-cached-property
+Test-Command: cd "$ADTTMP" ; python3 -c "import cached_property ; print(cached_property.__version__)"
+
+# Disable the test suite temporarily on behalf of the release team
+# freezegun introduced incomaptible API changes
+# See https://bugs.debian.org/923282
+#Depends: python3-cached-property, python3-freezegun
+#Tests: run-testsuite3
+#Restrictions: allow-stderr

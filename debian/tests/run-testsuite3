@@ -1,0 +1,16 @@
+#!/bin/sh -e
+
+pkg=python3-cached-property
+
+if [ "$AUTOPKGTEST_TMP" = "" ] ; then
+  AUTOPKGTEST_TMP=$(mktemp -d /tmp/${pkg}-test.XXXXXX)
+  trap "rm -rf $AUTOPKGTEST_TMP" 0 INT QUIT ABRT PIPE TERM
+fi
+
+cd $AUTOPKGTEST_TMP
+
+mkdir tests
+cp -a /usr/share/${pkg}/tests/* ./tests/
+cp -a /usr/lib/python3/dist-packages/cached_property.py .
+
+python3 -m unittest discover -v

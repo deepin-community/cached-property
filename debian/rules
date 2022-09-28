@@ -1,0 +1,22 @@
+#!/usr/bin/make -f
+
+export PYBUILD_NAME := cached-property
+
+# 20190314: Disable temporarily all tests on behalf of the release team.
+# freezegun introduced incompatible API changes.
+# See https://bugs.debian.org/923282
+export PYBUILD_DISABLE=test
+
+%:
+	dh $@ --with python3 --buildsystem=pybuild
+
+override_dh_auto_clean:
+	rm -rf $(PACKAGE_NAME).egg-info
+	rm -rf PKG-INFO
+	dh_auto_clean
+
+override_dh_install:
+	dh_install
+	# Copy the test suite to a decent location
+	mkdir -p debian/python3-cached-property/usr/share/python3-cached-property
+	cp -r tests/ debian/python3-cached-property/usr/share/python3-cached-property
